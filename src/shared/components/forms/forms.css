@@ -1,0 +1,51 @@
+.form-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.form-control input[type='text'],
+.form-control input[type='email'],
+.form-control input[type='checkbox'],
+.form-control button,
+.form-control select {
+    font-size: 14px;
+    width: 250px;
+    margin: 10px;
+    padding: 12px 5px;
+    border-radius: 10px;
+}
+
+.submit-button {
+    margin-bottom: 25px !important;
+}
+
+.form-control .error-message {
+    color: red;
+    width: 250px;
+    margin-left: 112px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 83vh;
+}
+
+.form-card {
+    width: 400px;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.input-label {
+    font-size: 18px;
+    font-weight: bold;
+    width: 100px;
+    display: inline-block;
+}
