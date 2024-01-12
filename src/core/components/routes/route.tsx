@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { LoginComponent, UserComponent } from "../../../components";
+import { LoginComponent, UserComponent, UserForm } from "../../../components";
 import { PrivateRoute } from "../private-route";
 
 import { HeaderComponent } from "../header";
@@ -12,7 +12,7 @@ interface RouterComponentProps {
 
 const RouterComponent: FunctionComponent<RouterComponentProps> = () => {
 
-    const getPrivateRoute = (component: FunctionComponent, scope: string) => {
+    const getPrivateRoute = (component: FunctionComponent, scope?: string) => {
         return <PrivateRoute component={component} scope={scope} />
     }
 
@@ -20,21 +20,26 @@ const RouterComponent: FunctionComponent<RouterComponentProps> = () => {
         path: '/list-user',
         component: UserComponent,
         scope: 'USER_COMPONENT'
+    }, {
+        path: '/create-user',
+        component: UserForm,
     }]
 
     return (<>
         <BrowserRouter basename="/">
-            <HeaderComponent></HeaderComponent>
-            <Routes >
-                <Route path="/" element={<Navigate to="/login" />} />
-                <Route path='/login' element={<LoginComponent />} />
+            <div>
+                <HeaderComponent></HeaderComponent>
+                <Routes >
+                    <Route path="/" element={<Navigate to="/login" />} />
+                    <Route path='/login' element={<LoginComponent />} />
 
-                {/* Private routes */}
-                {privateComponents.map(props => <Route key={props.path} path={props.path} element={getPrivateRoute(props.component, props.scope)} />)}
+                    {/* Private routes */}
+                    {privateComponents.map(props => <Route key={props.path} path={props.path} element={getPrivateRoute(props.component, props?.scope)} />)}
 
-                {/* Not found route */}
-                <Route path="*" element={<NotFoundComponent />} />
-            </Routes>
+                    {/* Not found route */}
+                    <Route path="*" element={<NotFoundComponent />} />
+                </Routes>
+            </div>
         </BrowserRouter></>);
 }
 

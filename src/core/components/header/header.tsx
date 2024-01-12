@@ -16,8 +16,8 @@ const HeaderComponent: FunctionComponent<HeaderComponentProps> = () => {
                     </div>
                     <ul className="menu">
                         <li><Link to='/list-user'>Home</Link></li>
-                        <li><Link to=''>About</Link></li>
-                        <li><Link to=''>Category</Link></li>
+                        <li><Link to='/create-user'>Create</Link></li>
+                        <li><Link to=''>about</Link></li>
                         <li><Link to=''>Contact</Link></li>
                         <li><Link to=''>Feedback</Link></li>
                     </ul>
