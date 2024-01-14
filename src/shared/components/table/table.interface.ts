@@ -9,9 +9,15 @@ export interface TableConfig {
     actions?: ActionConfig[];
 }
 
+export interface TableActionHandler {
+    type: string;
+    id: string;
+    data: any;
+}
+
 export interface TableComponentProps {
     config?: TableConfig[],
     data?: any[];
-    actionHandler?: any;
+    actionHandler?: (data: TableActionHandler) => any;
 }
 

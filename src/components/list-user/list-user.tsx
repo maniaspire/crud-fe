@@ -1,30 +1,56 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { UserComponentProps } from "./list-user.interface";
-import { TableComponent } from "../../shared";
+import { TableActionHandler, TableComponent } from "../../shared";
+import { useHttp } from "../../core/hooks";
+import { Gender, WorkRoles } from "../user-form";
+import { TableActions } from "../../shared/components/table/table.constant";
+import { Navigate, useNavigate } from "react-router-dom";
 
-const configuration = [{ name: 'Job Id', field: 'jobId' },
-{ name: 'Customer Name', field: 'customerName' },
-{ name: 'Amount Due', field: 'amountDue' },
-{
-    name: 'Payment Status',
-    actions: [
-        { name: 'delete', type: 'DELETE' },
-        { name: 'edit', type: 'EDIT' }]
-}]
-
-const Testdata = [{
-    _id: '123',
-    jobId: '42235',
-    customerName: 'John Doe',
-    amountDue: '2345678',
-}]
+const configuration = [
+    { name: 'User Name', field: 'username' },
+    { name: 'Gender', field: 'genderName' },
+    { name: 'Email', field: 'email' },
+    { name: 'Work Role', field: 'workRoleName' },
+    {
+        name: 'Actions',
+        actions: [
+            { name: 'delete', type: TableActions.delete },
+            { name: 'edit', type: TableActions.edit }]
+    }]
 
 const UserComponent: FunctionComponent<UserComponentProps> = () => {
-    const actionHandler = (data: any) => {
-        console.log(data, 'data12345432');
+    const [data, setData] = useState([]);
+    const { get, deleteApi } = useHttp('user');
+    const navigate = useNavigate()
+
+    const loadData = async () => {
+        const data = await get('');
+        const users = data.data.map((item: any) => ({
+            ...item,
+            genderUuid: item.gender,
+            genderName: Gender.find(gender => gender._id === item.gender)?.name,
+            workRoleName: WorkRoles.find(workRole => workRole._id === item.workRole)?.name,
+            workRoleUuid: item.workRole
+        }))
+        setData(users);
+    }
+
+
+    useEffect(() => {
+        loadData();
+    }, [])
+
+    const actionHandler = async ({ data, type, id }: TableActionHandler) => {
+        if (type === TableActions.delete) {
+            await deleteApi('', id);
+            await loadData()
+        }
+        if (type === TableActions.edit) {
+            navigate('/edit-user', { state: { data } })
+        }
     }
     return (<>
-        <TableComponent config={configuration} data={Testdata} actionHandler={actionHandler}></TableComponent>
+        <TableComponent config={configuration} data={data} actionHandler={actionHandler}></TableComponent>
     </>);
 }
 
