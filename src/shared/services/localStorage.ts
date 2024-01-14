@@ -6,15 +6,13 @@ class LocalStorage {
         localStorage.setItem(key, value);
     }
 
-    getItem<T>(key: string): T {
-        const data: string = localStorage.getItem(key);
-        if (data)
-            return JSON.parse(data);
-        throw Error('value not found');
+    getItem(key: string): string {
+        const data: string = localStorage.getItem(key) || "";
+        return data;
     }
-    
+
 
 }
 
-const localStorage = new LocalStorage();
-export default localStorage;
+const localStorageObj = new LocalStorage();
+export default localStorageObj;

@@ -1,8 +1,6 @@
-// PlotForms.tsx
+import { FunctionComponent, useEffect, useState } from "react";
 
-import { FunctionComponent } from "react";
-
-import { ErrorMessage, Field, Formik } from "formik";
+import { ErrorMessage, Field, Formik, useFormik } from "formik";
 import { FormFieldConfig, PlotFormsProps } from "./forms.interface";
 import { createValidationSchema } from "./form.helper";
 
@@ -10,6 +8,20 @@ import './forms.css';
 
 const PlotForms: FunctionComponent<PlotFormsProps> = ({ formConfig, data }) => {
     const { config: configs, submit } = formConfig;
+
+    const getInitialValue = () => {
+        return configs.reduce((result, config) => ({ ...result, [config.name]: data ? data[config.name] : (config.defaultValue || '') }), {});
+    }
+
+    const getFormikConfig = () => {
+        return {
+            initalValue: getInitialValue(),
+            validator: createValidationSchema(configs),
+            submit: submit
+        }
+    }
+
+    const [formikConfig, setFormikConfig] = useState(getFormikConfig());
 
     const getField = ({ type, name, placeholder, label }: FormFieldConfig) => {
         return (
@@ -36,13 +48,13 @@ const PlotForms: FunctionComponent<PlotFormsProps> = ({ formConfig, data }) => {
     const getRadioButton = ({ type, name, options, label }: FormFieldConfig) => {
         return (
             <div className="form-field-container">
-                <label className="input-label">{label}</label>
+                <label key={name} className="input-label">{label}</label>
                 <div style={{ width: '250px', display: 'inline-block' }}>
-                    {options?.map(option => (<>
-                        <div>
+                    {options?.map(option => (
+                        <div key={option._id}>
                             <Field type={type} name={name} value={option._id} />{option.name}
                         </div>
-                    </>))}
+                    ))}
                 </div>
 
                 <ErrorMessage component='div' name={name} className="error-message" />
@@ -66,32 +78,31 @@ const PlotForms: FunctionComponent<PlotFormsProps> = ({ formConfig, data }) => {
     }
 
 
-    const getInitialValue = () => {
-        return configs.reduce((result, config) => ({ ...result, [config.name]: data ? data[config.name] : (config.defaultValue || '') }), {});
-    }
+    useEffect(() => {
+        setFormikConfig(getFormikConfig());
+    }, [formConfig, data])
 
     return (
         <div className="form-container" >
             <Formik
-                initialValues={getInitialValue()}
-                onSubmit={submit.handler}
-                validationSchema={createValidationSchema(configs)}
+                initialValues={formikConfig.initalValue}
+                onSubmit={formikConfig.submit.handler}
+                enableReinitialize
+                validationSchema={formikConfig.validator}
             >
                 {({ handleSubmit, errors, touched }) => (
-                    <>{console.log(touched, errors)}
-                        <form className="form-card" onSubmit={handleSubmit}>
-                            <h2 className="form-control">Add User</h2>
-                            <hr></hr>
-                            {configs.map(config => (
-                                <div key={config.name} className="form-control">
-                                    {getFormField(config)}
-                                </div>
-                            ))}
-                            <div className="form-control">
-                                <button type="submit" className="submit-button" disabled={Object.keys(touched).length === 0 || !!Object.keys(errors).length}>{submit.label}</button>
+                    <form className="form-card" onSubmit={handleSubmit}>
+                        <h2 className="form-control">{data ? 'Edit' : 'Add'} User</h2>
+                        <hr></hr>
+                        {configs.map(config => (
+                            <div key={config.name} className="form-control">
+                                {getFormField(config)}
                             </div>
-                        </form>
-                    </>
+                        ))}
+                        <div className="form-control">
+                            <button type="submit" className="submit-button" disabled={Object.keys(touched).length === 0 || !!Object.keys(errors).length}>{submit.label}</button>
+                        </div>
+                    </form>
                 )}
 
             </Formik>

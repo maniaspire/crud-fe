@@ -32,7 +32,7 @@ const TableComponent: FunctionComponent<TableComponentProps> = ({ config: config
                     <div className={classes} key={`cell-${row._id}-${index}`}>
                       {config.actions ? (
                         config.actions.map((action, actionIndex) => (
-                          <button key={`action-${row._id}-${actionIndex}`} onClick={() => actionHandler({ id: row._id, type: action.type })}>
+                          <button key={`action-${row._id}-${actionIndex}`} onClick={() => actionHandler && actionHandler({ id: row._id, type: action.type, data: row })}>
                             {action.name}
                           </button>
                         ))

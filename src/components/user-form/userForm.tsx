@@ -1,17 +1,44 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import './userForm.css';
 import { PlotForms, PlotFormsProps } from "../../shared/components/forms";
+import { Gender, WorkRoles } from "./user.constants";
+import { UserInfo } from "./user.interface";
+import { useHttp } from "../../core/hooks";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface UserFormProps {
-
 }
 
 const UserForm: FunctionComponent<UserFormProps> = () => {
+    const { state } = useLocation();
+    const navigate = useNavigate();
+    const { post, update } = useHttp('user');
 
-    const dummyData: PlotFormsProps = {
+    const handleSubmit = async (values: UserInfo) => {
+        try {
+            await (state?.data ? update('', state.data?._id, values) : post('', values));
+            navigate('/list-user');
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const userFormConfig: PlotFormsProps = {
         formConfig: {
             config: [
+                {
+                    type: 'text',
+                    name: 'username',
+                    label: 'Username',
+                    placeholder: 'Enter your name',
+                    defaultValue: '',
+                    validations: {
+                        required: true,
+                        minLength: 5
+                    }
+                },
                 {
                     type: 'email',
                     name: 'email',
@@ -24,31 +51,12 @@ const UserForm: FunctionComponent<UserFormProps> = () => {
                     }
                 },
                 {
-                    type: 'text',
-                    name: 'user',
-                    label: 'Name',
-                    placeholder: 'Enter your name',
-                    defaultValue: '',
-                    validations: {
-                        required: true,
-                        minLength: 5
-                    }
-                },
-                {
-                    type: 'checkbox',
-                    name: 'notification',
-                    label: 'Allow Notifications',
-                    placeholder: '',
-                    defaultValue: '',
-                }, {
                     type: 'select',
-                    name: 'profession',
-                    label: 'Profession',
-                    placeholder: 'Please select your profession',
+                    name: 'workRole',
+                    label: 'Work Role',
+                    placeholder: 'Please select your work role',
                     defaultValue: '',
-                    options: [{
-                        _id: '1', name: 'Developer',
-                    }, { _id: '2', name: 'Senior Developer' }],
+                    options: WorkRoles,
                     validations: {
                         required: true,
                     }
@@ -59,9 +67,7 @@ const UserForm: FunctionComponent<UserFormProps> = () => {
                     label: 'Gender',
                     placeholder: '',
                     defaultValue: '',
-                    options: [{
-                        _id: '1', name: 'Developer',
-                    }, { _id: '2', name: 'Senior Developer' },],
+                    options: Gender,
                     validations: {
                         required: true,
                     }
@@ -69,16 +75,20 @@ const UserForm: FunctionComponent<UserFormProps> = () => {
 
             ],
             submit: {
-                handler: (values: any) => { console.log(values) },
+                handler: handleSubmit,
                 label: "Submit"
             }
         },
-        // data: { user: 'mani@gmail.com', email: 'mani@gmial.com', profession: '2', notification: true }
     }
 
+    const [formConfig, setFormConfig] = useState<PlotFormsProps>(userFormConfig);
+
+    useEffect(() => {
+        setFormConfig(({ ...userFormConfig, data: state?.data }))
+    }, [state])
 
     return <>
-        <PlotForms {...dummyData}></PlotForms>
+        <PlotForms formConfig={formConfig.formConfig} data={formConfig.data}></PlotForms>
     </ >
 };
 

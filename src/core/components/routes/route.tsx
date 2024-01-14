@@ -23,6 +23,9 @@ const RouterComponent: FunctionComponent<RouterComponentProps> = () => {
     }, {
         path: '/create-user',
         component: UserForm,
+    }, {
+        path: '/edit-user',
+        component: UserForm,
     }]
 
     return (<>
