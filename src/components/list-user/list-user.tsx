@@ -4,7 +4,7 @@ import { TableActionHandler, TableComponent } from "../../shared";
 import { useHttp } from "../../core/hooks";
 import { Gender, WorkRoles } from "../user-form";
 import { TableActions } from "../../shared/components/table/table.constant";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const configuration = [
     { name: 'User Name', field: 'username' },

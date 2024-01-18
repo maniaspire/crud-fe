@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 
-import { ErrorMessage, Field, Formik, useFormik } from "formik";
+import { ErrorMessage, Field, Formik } from "formik";
 import { FormFieldConfig, PlotFormsProps } from "./forms.interface";
 import { createValidationSchema } from "./form.helper";
 
