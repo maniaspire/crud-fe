@@ -1,5 +1,5 @@
 import './App.css';
-import { FooterComponent, HeaderComponent, RouterComponent } from './core/components';
+import { FooterComponent, HeaderComponent, RouterComponent } from './core';
 
 
 function App() {

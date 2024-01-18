@@ -1,12 +1,15 @@
 import { FunctionComponent, ReactNode, useEffect } from "react";
-import { Axios } from "../../helpers";
 import { AxiosError, AxiosResponse } from "axios";
+import { useAppReducer, AppContext } from "../../reducer";
+import { Axios } from "../../helpers";
 
 interface HttpInterceptorProps {
     children: ReactNode
 }
 
 const HttpInterceptor: FunctionComponent<HttpInterceptorProps> = ({ children }) => {
+
+    const { dispatch, getContextValue } = useAppReducer();
 
     const handleSuccessResponse = (response: AxiosResponse) => response;
     const handleFailureResponse = (data: AxiosError) => {
@@ -26,9 +29,9 @@ const HttpInterceptor: FunctionComponent<HttpInterceptorProps> = ({ children }) 
     }, [])
 
     return (
-        <>
+        <AppContext.Provider value={{ dispatch, getContextValue }}>
             {children}
-        </>
+        </AppContext.Provider>
     )
 }
 

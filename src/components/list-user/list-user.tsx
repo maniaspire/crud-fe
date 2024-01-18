@@ -1,10 +1,11 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { UserComponentProps } from "./list-user.interface";
 import { TableActionHandler, TableComponent } from "../../shared";
 import { useHttp } from "../../core/hooks";
 import { Gender, WorkRoles } from "../user-form";
 import { TableActions } from "../../shared/components/table/table.constant";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../core";
 
 const configuration = [
     { name: 'User Name', field: 'username' },
@@ -19,6 +20,7 @@ const configuration = [
     }]
 
 const UserComponent: FunctionComponent<UserComponentProps> = () => {
+    const { dispatch } = useContext(AppContext)
     const [data, setData] = useState([]);
     const { get, deleteApi } = useHttp('user');
     const navigate = useNavigate()
@@ -33,6 +35,7 @@ const UserComponent: FunctionComponent<UserComponentProps> = () => {
             workRoleUuid: item.workRole
         }))
         setData(users);
+        dispatch({ type: 'setUser', data: { 'name': 'manikandan' } });
     }
 
 
@@ -50,6 +53,7 @@ const UserComponent: FunctionComponent<UserComponentProps> = () => {
         }
     }
     return (<>
+        <h1>{}</h1>
         <TableComponent config={configuration} data={data} actionHandler={actionHandler}></TableComponent>
     </>);
 }

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 
 import './userForm.css';
 import { PlotForms, PlotFormsProps } from "../../shared/components/forms";
@@ -6,11 +6,14 @@ import { Gender, WorkRoles } from "./user.constants";
 import { UserInfo } from "./user.interface";
 import { useHttp } from "../../core/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AppContext } from "../../core";
 
 interface UserFormProps {
 }
 
 const UserForm: FunctionComponent<UserFormProps> = () => {
+    const { getContextValue } = useContext(AppContext);
+    console.log(getContextValue().user, getContextValue('user'))
     const { state } = useLocation();
     const navigate = useNavigate();
     const { post, update } = useHttp('user');
