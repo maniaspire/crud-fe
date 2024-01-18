@@ -3,10 +3,10 @@ import { PrivateRouteProps } from "./private-route.interface";
 
 import { Navigate } from "react-router-dom";
 
-const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ component: Component, scope }) => {
+const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ children, scope }) => {
     return (
         <>
-            {true ? <Component /> : <Navigate to='/login'></Navigate>}
+            {true ? children : <Navigate to='/login'></Navigate>}
         </>);
 }
 

@@ -1,6 +1,7 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, ReactNode } from "react";
+import { RouteProps } from "react-router-dom";
 
-export interface PrivateRouteProps {
-    component: FunctionComponent,
-    scope?: string
-}
+export type PrivateRouteProps = RouteProps & {
+    scope?: string;
+    children?: ReactNode;
+};

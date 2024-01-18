@@ -5,7 +5,7 @@ const useHttp = (apiBaseUrl: string) => {
 
     const getApiEndPoint = (url: string) => url === '' ? apiBaseUrl : `${apiBaseUrl}/${url}`
 
-    const get = (url: string, params?: any) => {
+    const get = (url: string, params?: any): Promise<any> => {
         return Axios.get(getApiEndPoint(url), { params });
     }
 

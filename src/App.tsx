@@ -1,12 +1,12 @@
-import React from 'react';
 import './App.css';
-import { FooterComponent, RouterComponent } from './core/components';
+import { FooterComponent, HeaderComponent, RouterComponent } from './core/components';
 
 
 function App() {
   return (
     <div className='productive-crud'>
-      <RouterComponent></RouterComponent>
+      <HeaderComponent />
+      <RouterComponent />
       <FooterComponent />
     </div>
 
